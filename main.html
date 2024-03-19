@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Code - Calculadora</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+<body>
+    <h1 style = "font-style: italic;">Calculadora</h1>
+
+    <label style = "font-style: italic;" for = "txtNumero1">Valor:</label>
+    <input type="text" id = "txtNumero1" value="1"/>
+    <br><br>
+
+    <label style = "font-style: italic;" for = "txtNumero2">Valor:</label>
+    <input type="text" id = "txtNumero2" value="1"/>
+    <br><br>
+
+    <div id="botoes"></div>
+    <!--
+        <input style = "font-style: italic;" type="button" value="somar" onclick="fazConta('somar')"/>
+        <input style = "font-style: italic;" type="button" value="subtrair" onclick="fazConta('subtrair')"/>
+        <input style = "font-style: italic;" type="button" value="dividir" onclick="fazConta('dividir')"/>
+        <input style = "font-style: italic;" type="button" value="multiplicar" onclick="fazConta('multiplicar')"/>
+    -->
+    <input style = "font-style: italic;" type="button" value="apagar" onclick="limpaInput()"/>
+
+    <br><br>
+    <label style = "font-style: italic;" for = "txtResultado">Resultado:</label>
+    <input type="text" id = "txtResultado" readonly/>
+
+    <script>
+        let
+            elNum1 = document.getElementById('txtNumero1'),
+            elNum2 = document.getElementById('txtNumero2'),
+            elResultado = document.getElementById('txtResultado'),
+            arrayOperacoes = ['somar', 'subtrair', 'dividir', 'multiplicar']
+        ;
+		
+		// -----------------------------------------------------------
+
+        function montarBotoes (arrayOps) {
+            let htmlBotoes = '';
+
+            arrayOps.forEach(operacao => {
+                htmlBotoes += `<input style = "font-style: italic;" type="button" value="${operacao}" onclick="fazConta('${operacao}')"/>`;
+            });
+
+            document.getElementById('botoes').insertAdjacentHTML('beforeend', htmlBotoes);
+        }
+
+        window.onload = function() {
+            montarBotoes(arrayOperacoes);
+        };
+		
+		// -----------------------------------------------------------
+
+        function fazConta (conta) {
+            let
+                num1 = parseInt(elNum1.value),
+                num2 = parseInt(elNum2.value),
+                resultado = ''
+            ;
+
+            if (checkPositivo(num1) && checkPositivo(num2)) {
+                switch (conta) {
+                    case 'somar':
+                        resultado = adicao(num1, num2);
+                        break;
+                    case 'subtrair':
+                        resultado = subtracao(num1, num2);
+                        break;
+                    case 'dividir':
+                        resultado = divisao(num1, num2);
+                        break;
+                    case 'multiplicar':
+                        resultado = multiplicacao(num1, num2);
+                        break;  
+                    default:
+                        swal("Burro", "Não tem essa conta", "error");
+                }
+            }
+            else {
+                swal("Burro", "Teu valor é 0 ou menor", "error");
+                limpaInput();
+            }
+
+            elResultado.value = resultado;
+        }
+
+        function checkPositivo (numero) {
+            if (numero > 0) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        function adicao (num1, num2) {
+            return num1 + num2;
+        }
+
+        function subtracao (num1, num2) {
+            return num1 - num2;
+        }
+
+        function divisao (num1, num2) {
+            return num1 / num2;
+        }
+
+        function multiplicacao (num1, num2) {
+            return num1 *  num2;
+        }
+
+        // -----------------------------------------------------------
+
+        function limpaInput () {
+            elNum1.value = '';
+            elNum2.value = '';
+            elResultado.value = ''; 
+        }
+    </script>
+
+</body>
+</html>
